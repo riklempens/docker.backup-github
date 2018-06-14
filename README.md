@@ -2,8 +2,7 @@
 # Introduction
 
 Based upon the work of [abusesa](https://github.com/abusesa/github-backup)
-
-We changed the initial setup to meet our requirement to run the backup inside a docker container.
+We changed the initial setup to meet our requirement to run the backup inside a docker container on a Synology NAS.
 
 # Table of Contents
 
@@ -11,6 +10,7 @@ We changed the initial setup to meet our requirement to run the backup inside a 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Run](#run)
+- [Maintenance](#maintenance)
 - [References](#references)
 
 # Prerequisites
@@ -42,7 +42,7 @@ First build the docker container:
 ```bash
 git clone git@github.com:riklempens/docker.backup-github.git
 cd docker.backup-github
-docker build -t backup-github .
+docker build -t --no-cache backup-github .
 ```
 
 # Run
@@ -50,12 +50,27 @@ docker build -t backup-github .
 Start the docker container, please note you should adjust the volume mapping to your own needs.
 
 ```bash
-docker run -d --restart unless-stopped \
+docker run --rm \
   --name backup-github \
-  -v /volume1/data:/data/home \
+  -v /volume1/backups/github:/data \
   backup-github 6b86190dd45c57c1a1b039a5a54d892e019102f7
 ```
 
+## Synology
+
+We use Synology's task scheduler to make a daily backup of all GitHub repositories.
+
+![synology scheduled task](images/synology-task.png)
+
+
+
+# Maintenance
+
+Check the progress of the backup:
+
+```bash
+docker logs -f backup-github
+```
 
 
 # References
