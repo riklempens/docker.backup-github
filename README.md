@@ -42,7 +42,7 @@ First build the docker container:
 ```bash
 git clone git@github.com:riklempens/docker.backup-github.git
 cd docker.backup-github
-docker build -t --no-cache backup-github .
+docker build --no-cache -t backup-github .
 ```
 
 # Run
